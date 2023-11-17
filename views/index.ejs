@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your IMDb-like Page</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="/img/uk.png" alt="Logo" class="logo">
+        <form class="search-bar">
+            <input type="text" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+        <button class="sign-up">Sign Up</button>
+    </header>
+
+    <div class="main-container">
+        <div class="carousel">
+            <img src="/img/uk1.jpg" alt="Movie 1" class="carousel-image active">
+            <img src="/img/uk2.jpg" alt="Movie 2" class="carousel-image">
+            <img src="/img/uk3.jpg" alt="Movie 3" class="carousel-image">
+            <p class="description">Description for Movie 1</p>
+            <button id="prev">Prev</button>
+            <button id="next">Next</button>
+        </div>
+
+        <div class="comment-section">
+            <form class="comment-form">
+                <textarea placeholder="Write a comment..."></textarea>
+                <button type="submit">Submit</button>
+                <button type="button" id="update-comment">Update Comment</button>
+                <button type="button" id="delete-comment">Delete Comment</button>
+            </form>
+
+                    <h3>Show Timings</h3>
+                    <p id="movie-timings">Select a movie to see show timings.</p>
+                
+                    <h3>Description</h3>
+                    <p id="movie-description">Select a movie to see its description.</p>
+               
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <img src="/img/uk.png" alt="Logo" class="footer-logo">
+            <div class="footer-links">
+                <a href="/about">About Us</a> |
+                <a href="/contact">Contact</a> |
+                <a href="/privacy">Privacy Policy</a>
+            </div>
+            <div class="footer-social-media">
+                <a href="your-facebook-link">Facebook</a> |
+                <a href="your-twitter-link">Twitter</a> |
+                <a href="your-instagram-link">Instagram</a>
+            </div>
+            <div class="footer-contact">
+                <p>Email us at: <a href="mailto:contact@example.com">contact@example.com</a></p>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2023 Your Website Name</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

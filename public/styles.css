@@ -1,0 +1,130 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #141414;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.search-bar input[type="text"] {
+    padding: 20px;
+    width: 70%;
+    width:700px;
+    border: 2px solid #ddd;
+    transition: border 0.3s ease;
+}
+
+.search-bar input[type="text"]:hover,
+.search-bar input[type="text"]:focus {
+    border-color: blue;
+}
+
+.sign-up {
+    padding: 10px;
+    background-color: rgb(84, 84, 113);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.main-container {
+    display: flex;
+    justify-content: start;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.carousel {
+    width: 500px; /* Adjust width */
+    height: 900px; /* Adjust height */
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.carousel-image.active {
+    opacity: 1;
+}
+
+.description {
+    margin-top: 10px;
+}
+
+.comment-section {
+    margin-left: 20px;
+    width: 500px; /* Adjust as needed */
+}
+
+.comment-form textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.comment-form button, #update-comment, #delete-comment {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: rgb(143, 82, 35);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#prev, #next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+}
+
+#prev { left: 10px; }
+#next { right: 10px; }
+footer {
+    background-color: #f3f3f3;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.footer-logo {
+    max-width: 100px; /* Adjust as needed */
+}
+
+.footer-links a, .footer-social-media a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.footer-contact p, .footer-copy p {
+    margin: 0;
+    color: #333;
+}
