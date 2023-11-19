@@ -78,8 +78,15 @@ function updateCarouselImages(movieId) {
     fetch('/movie-images/' + movieId)
         .then(response => response.json())
         .then(imageUrls => {
-            const carousel = document.querySelector('.carousel');
-            carousel.innerHTML = imageUrls.map(url => `<img src="${url}" class="carousel-image">`).join('');
+            const carouselImages = document.querySelectorAll('.carousel-image');
+            
+            imageUrls.forEach((url, index) => {
+                if (carouselImages[index]) {
+                    carouselImages[index].src = url;
+                    carouselImages[index].classList.remove('active');
+                    if (index === 0) carouselImages[index].classList.add('active');
+                }
+            });
         })
         .catch(error => console.error('Error:', error));
 }
