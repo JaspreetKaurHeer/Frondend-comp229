@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentImageIndex = 0;
     const images = document.querySelectorAll('.carousel-image');
     const descriptions = [
-        "Description for Movie 1",
+        "hi",
         "Description for Movie 2",
         "Description for Movie 3"
     ];
@@ -43,4 +43,46 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Delete comment');
         // Add functionality for deleting a comment
     });
-});
+
+//search movie function
+function searchMovie() {
+    const keyword = document.getElementById('searchKeyword').value;
+    if (!keyword) {
+        alert("Please enter a keyword");
+        return;
+    }
+
+    fetch('/search/' + encodeURIComponent(keyword))
+        .then(response => response.json())
+        .then(data => {
+            displayMovieInfo(data.movie);
+            updateCarouselImages(data.id);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message);
+        });
+}
+
+function displayMovieInfo(movie) {
+    const movieContainer = document.getElementById('movieInfo');
+    movieContainer.innerHTML = `
+        <h1>${movie.title || 'Title Not Available'}</h1>
+        <p><strong>Release Date:</strong> ${movie.release_date || 'Not Available'}</p>
+        <p><strong>Overview:</strong> ${movie.overview || 'No overview available'}</p>
+        <!-- More movie details here -->
+    `;
+}
+
+function updateCarouselImages(movieId) {
+    fetch('/movie-images/' + movieId)
+        .then(response => response.json())
+        .then(imageUrls => {
+            const carousel = document.querySelector('.carousel');
+            carousel.innerHTML = imageUrls.map(url => `<img src="${url}" class="carousel-image">`).join('');
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+
+})

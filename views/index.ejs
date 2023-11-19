@@ -8,8 +8,8 @@
     <header>
         <img src="/img/uk.png" alt="Logo" class="logo">
         <form class="search-bar">
-            <input type="text" placeholder="Search...">
-            <button type="submit">Search</button>
+            <input type="text" placeholder="Search..." id="searchKeyword">
+            <button onclick="seachMovie()"> Search </button>
         </form>
         <button class="sign-up">Sign Up</button>
     </header>
@@ -25,6 +25,16 @@
         </div>
 
         <div class="comment-section">
+
+            <div id="movieInfo"></div> 
+
+            <h3>Show Timings</h3>
+            <p id="movie-timings">Select a movie to see show timings.</p>
+        
+            <h3>Description</h3>
+            <p id="movie-description">Select a movie to see its description.</p>
+            
+
             <form class="comment-form">
                 <textarea placeholder="Write a comment..."></textarea>
                 <button type="submit">Submit</button>
@@ -32,12 +42,8 @@
                 <button type="button" id="delete-comment">Delete Comment</button>
             </form>
 
-                    <h3>Show Timings</h3>
-                    <p id="movie-timings">Select a movie to see show timings.</p>
-                
-                    <h3>Description</h3>
-                    <p id="movie-description">Select a movie to see its description.</p>
-               
+
+                   
         </div>
     </div>
 
