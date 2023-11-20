@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const baseURL = 'http://localhost:5050';
+
     let currentImageIndex = 0;
     const images = document.querySelectorAll('.carousel-image');
     const descriptions = [
@@ -44,52 +46,51 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add functionality for deleting a comment
     });
 
-//search movie function
-function searchMovie() {
-    const keyword = document.getElementById('searchKeyword').value;
-    if (!keyword) {
-        alert("Please enter a keyword");
-        return;
+    //search movie function
+    async function searchMovie() {
+        const keyword = document.getElementById('searchKeyword').value;
+        if (!keyword) {
+            alert("Please enter a keyword");
+            return;
+        }
+        await fetch(`${baseURL}/tmdb/search/${keyword}`)
+            .then(response => response.json())
+            .then(data => {
+                displayMovieInfo(data.movie);
+                updateCarouselImages(data.id);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
     }
 
-    fetch('/search/' + encodeURIComponent(keyword))
-        .then(response => response.json())
-        .then(data => {
-            displayMovieInfo(data.movie);
-            updateCarouselImages(data.id);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert(error.message);
-        });
-}
+    function displayMovieInfo(movie) {
+        const movieContainer = document.getElementById('movieInfo');
+        movieContainer.innerHTML = `
+            <h1>${movie.title || 'Title Not Available'}</h1>
+            <p><strong>Release Date:</strong> ${movie.release_date || 'Not Available'}</p>
+            <p><strong>Overview:</strong> ${movie.overview || 'No overview available'}</p>
+            <!-- More movie details here -->
+        `;
+    }
 
-function displayMovieInfo(movie) {
-    const movieContainer = document.getElementById('movieInfo');
-    movieContainer.innerHTML = `
-        <h1>${movie.title || 'Title Not Available'}</h1>
-        <p><strong>Release Date:</strong> ${movie.release_date || 'Not Available'}</p>
-        <p><strong>Overview:</strong> ${movie.overview || 'No overview available'}</p>
-        <!-- More movie details here -->
-    `;
-}
+    async function updateCarouselImages(movieId) {
+        await fetch(`${baseURL}/tmdb/movie-images/${movieId}`)
+            .then(response => response.json())
+            .then(imageUrls => {
+                const carouselImages = document.querySelectorAll('.carousel-image');
+                
+                imageUrls.forEach((url, index) => {
+                    if (carouselImages[index]) {
+                        carouselImages[index].src = url;
+                        carouselImages[index].classList.remove('active');
+                        if (index === 0) carouselImages[index].classList.add('active');
+                    }
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
-function updateCarouselImages(movieId) {
-    fetch('/movie-images/' + movieId)
-        .then(response => response.json())
-        .then(imageUrls => {
-            const carouselImages = document.querySelectorAll('.carousel-image');
-            
-            imageUrls.forEach((url, index) => {
-                if (carouselImages[index]) {
-                    carouselImages[index].src = url;
-                    carouselImages[index].classList.remove('active');
-                    if (index === 0) carouselImages[index].classList.add('active');
-                }
-            });
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-
-})
+    document.getElementById('searchButton').addEventListener('click', (e) => {e.preventDefault(); searchMovie()});
+});
