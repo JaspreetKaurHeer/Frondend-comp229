@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const baseURL = 'http://localhost:5050';
+    let movieid;
 
     let currentImageIndex = 0;
     const images = document.querySelectorAll('.carousel-image');
@@ -34,9 +35,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const comment = this.querySelector('textarea').value;
         console.log('Comment submitted:', comment);
         this.querySelector('textarea').value = '';
+
+        fetch(`${baseURL}/reviews/`, 
+            {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(comment)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
     });
 
-    document.getElementById('update-comment').addEventListener('click', () => {
+    document.getElementById('update-comment').addEventListener('click', (e) => {
+        e.preventDefault();
         console.log('Update comment');
         // Add functionality for updating a comment
     });
@@ -76,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function updateCarouselImages(movieId) {
+        movieid = movieId;
         await fetch(`${baseURL}/tmdb/movie-images/${movieId}`)
             .then(response => response.json())
             .then(imageUrls => {
