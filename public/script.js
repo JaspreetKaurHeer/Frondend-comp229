@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const baseURL = 'http://localhost:5050';
+    let currentMovieId = 0;
+    let currentReview = [];
 
     let currentImageIndex = 0;
     const images = document.querySelectorAll('.carousel-image');
@@ -32,25 +34,89 @@ document.addEventListener('DOMContentLoaded', () => {
     commentForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const comment = this.querySelector('textarea').value;
-        console.log('Comment submitted:', comment);
         this.querySelector('textarea').value = '';
+
+        let commentBody = {
+            "movieid": currentMovieId,
+            "comment": comment
+        };
+
+        fetch(`${baseURL}/reviews/`, 
+            {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(commentBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
     });
 
-    document.getElementById('update-comment').addEventListener('click', () => {
-        console.log('Update comment');
-        // Add functionality for updating a comment
+    document.getElementById('update-comment').addEventListener('click', (e) => {
+        e.preventDefault();
+        const comment = document.getElementById('commentsection').value;
+        document.getElementById('commentsection').value = '';
+
+        let commentBody = {
+            "comment": comment
+        };
+
+        fetch(`${baseURL}/reviews/${currentReview[0]._id}`, 
+            {
+                method: "PATCH",
+                mode: "cors",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(commentBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                getMovieReviews(currentMovieId);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
     });
 
-    document.getElementById('delete-comment').addEventListener('click', () => {
-        console.log('Delete comment');
-        // Add functionality for deleting a comment
+    document.getElementById('delete-comment').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        fetch(`${baseURL}/reviews/${currentReview[0]._id}`, 
+            {
+                method: "DELETE",
+                mode: "cors",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                getMovieReviews(currentMovieId);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
     });
 
     //search movie function
     async function searchMovie() {
         const keyword = document.getElementById('searchKeyword').value;
         if (!keyword) {
-            alert("Please enter a keyword");
+            //alert("Please enter a keyword");
             return;
         }
         await fetch(`${baseURL}/tmdb/search/${keyword}`)
@@ -58,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 displayMovieInfo(data.movie);
                 updateCarouselImages(data.id);
+                getMovieReviews(data.id);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -76,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function updateCarouselImages(movieId) {
+        currentMovieId = movieId;
         await fetch(`${baseURL}/tmdb/movie-images/${movieId}`)
             .then(response => response.json())
             .then(imageUrls => {
@@ -90,6 +158,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             })
             .catch(error => console.error('Error:', error));
+    }
+
+    async function getMovieReviews(movieId) {
+        await fetch(`${baseURL}/reviews/movie/${movieId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                displayMovieReviews(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+    }
+
+    function displayMovieReviews(reviews) {
+        currentReview = reviews;
+        if (!reviews) {
+            return;
+        }
+        const reviewsContainer = document.getElementById('user-review');
+        reviewsContainer.innerHTML = '';
+        reviews.forEach(review => {
+            reviewsContainer.innerHTML += `
+            <h1>User Reviews</h1>
+            <p><strong>User name:</strong> ${review.username}</p>
+            <p><strong>Comment:</strong> ${review.comment}</p>
+        `;
+        });
     }
 
     document.getElementById('searchButton').addEventListener('click', (e) => {e.preventDefault(); searchMovie()});

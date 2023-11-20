@@ -104,6 +104,29 @@ header {
     margin-bottom: 10px;
 }
 
+#user-review {
+    width: 95%;
+    height: 300px;
+    background-color: #fdfdfd; 
+    padding: 20px;
+
+    margin-top: 0px;
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    overflow: auto; 
+}
+
+#user-review h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#user-review p {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
 
 .comment-form button, #update-comment, #delete-comment {
     width: 100%;
