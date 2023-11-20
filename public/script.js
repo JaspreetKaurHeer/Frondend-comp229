@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const baseURL = 'http://localhost:5050';
+  
     let currentMovieId = 0;
     let currentReview = [];
 
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function updateCarouselImages(movieId) {
-        currentMovieId = movieId;
+        currentMovieId = movieId
         await fetch(`${baseURL}/tmdb/movie-images/${movieId}`)
             .then(response => response.json())
             .then(imageUrls => {
