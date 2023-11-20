@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const baseURL = 'http://localhost:5050';
+  
     let currentMovieId = 0;
     let currentReview = [];
 
