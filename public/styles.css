@@ -69,10 +69,11 @@ header {
     justify-content: start;
     align-items: flex-start;
     padding: 20px;
+    width: 90%;
 }
 
 .carousel {
-    width: 500px; /* Adjust width */
+    width: 50%; /* Adjust width */
     height: 900px; /* Adjust height */
     overflow: hidden;
     position: relative;
@@ -97,7 +98,7 @@ header {
 
 .comment-section {
     margin-left: 20px;
-    width: 500px; /* Adjust as needed */
+    width: 50%; /* Adjust as needed */
 }
 
 .comment-form textarea {
