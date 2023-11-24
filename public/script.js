@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     let currentMovieId = 0;
     let currentReview = [];
+    let currentReviewId = 0;
 
     let currentImageIndex = 0;
     const images = document.querySelectorAll('.carousel-image');
@@ -37,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const comment = this.querySelector('textarea').value;
         this.querySelector('textarea').value = '';
 
+        if (!comment) {
+            return;
+        }
+
         let commentBody = {
             "movieid": currentMovieId,
             "comment": comment
@@ -63,6 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('update-comment').addEventListener('click', (e) => {
+        if (!currentReviewId) {
+            alert('Please select a review to update!');
+            return;
+        }
         e.preventDefault();
         const comment = document.getElementById('commentsection').value;
         document.getElementById('commentsection').value = '';
@@ -71,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "comment": comment
         };
 
-        fetch(`${baseURL}/reviews/${currentReview[0]._id}`, 
+        fetch(`${baseURL}/reviews/${currentReviewId}`, 
             {
                 method: "PATCH",
                 mode: "cors",
@@ -92,9 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('delete-comment').addEventListener('click', (e) => {
+        if (!currentReviewId) {
+            alert('Please select a review to delete!');
+            return;
+        }
         e.preventDefault();
-
-        fetch(`${baseURL}/reviews/${currentReview[0]._id}`, 
+        fetch(`${baseURL}/reviews/${currentReviewId}`, 
             {
                 method: "DELETE",
                 mode: "cors",
@@ -182,19 +194,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const reviewsContainer = document.getElementById('user-review');
         reviewsContainer.innerHTML = '';
-        // reviews.forEach(review => {
-        //     reviewsContainer.innerHTML += `
-        //     <h1>User Reviews</h1>
-        //     <p><strong>User name:</strong> ${review.username}</p>
-        //     <p><strong>Comment:</strong> ${review.comment}</p>
-        // `;
-        // });
+        currentReviewId = 0;
         reviews.forEach(review => {
             let div = document.createElement('div');
             div.className = 'user-review';
             div.innerHTML = `
                 <p><strong>${review.username}</strong>: ${review.comment}</p>
             `;
+            div.id = review._id;
+            div.tabIndex = -1;
+            div.addEventListener('focus', (e) => {
+                if (currentReviewId) {
+                    document.getElementById(currentReviewId).classList.remove('active');
+                }
+                currentReviewId = e.target.id;
+                e.target.classList.add('active');
+            });
+            // div.addEventListener('blur', (e) => {
+            //     currentReviewId = 0;
+            //     e.target.classList.remove('active');
+            // });
             reviewsContainer.appendChild(div);
         });
     }
