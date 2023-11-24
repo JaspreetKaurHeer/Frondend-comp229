@@ -7,10 +7,12 @@
 <body>
     <header>
         <img src="/img/uk.png" alt="Logo" class="logo">
-        <form class="search-bar">
-            <input type="text" placeholder="Search..." id="searchKeyword">
-            <button id="searchButton"> Search </button>
-        </form>
+        <div id="search-box">
+            <form class="search-bar">
+                <input type="text" placeholder="Search..." id="searchKeyword">
+                <button id="searchButton"><img src="/img/search_icon.png" alt="search"></button>
+            </form>
+        </div>
         <button class="sign-up">Sign Up</button>
     </header>
 
@@ -28,7 +30,7 @@
 
             <div id="movieInfo"></div> 
 
-            <div id="user-review"></div> 
+            <div class="review" id="user-review"></div> 
 
             <!-- <h3>Show Timings</h3>
             <p id="movie-timings">Select a movie to see show timings.</p>

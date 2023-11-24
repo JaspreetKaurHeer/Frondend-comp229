@@ -16,17 +16,44 @@ header {
     border-radius: 10px;
 }
 
+#search-box {
+    background-color: #fdfdfd; 
+    padding: 1px;
+
+    align-items: center;
+    margin-top: 0px;
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    transition: border 0.3s ease;
+}
+
+#search-box button {
+    border: none;
+    background-color: #fdfdfd; 
+    text-align: center;
+}
+
+#search-box img {
+    width: 30px;
+    height: 30px;
+}
+
+#search-box:hover,
+#search-box:focus {
+    border: 2px solid blue;
+    transition: border 0.3s ease;
+}
+
 .search-bar input[type="text"] {
     padding: 20px;
     width: 70%;
     width:700px;
-    border: 2px solid #ddd;
-    transition: border 0.3s ease;
+    border: none;
 }
 
-.search-bar input[type="text"]:hover,
-.search-bar input[type="text"]:focus {
-    border-color: blue;
+.search-box:hover,
+.search-box:focus {
+    border: none;
 }
 
 .sign-up {
@@ -76,6 +103,7 @@ header {
 .comment-form textarea {
     width: 100%;
     height: 100px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
@@ -84,47 +112,55 @@ header {
 #movieInfo {
     width: 95%;
     height: 300px;
-    background-color: #fdfdfd; 
+    background-color: rgb(56, 56, 56); 
     padding: 20px;
 
-    margin-top: 0px;
+    margin-top: 10px;
     border: 1px solid #e0e0e0; /* Light border */
     border-radius: 8px; /* Rounded corners */
     overflow: auto; 
 }
 
 #movieInfo h1 {
-    color: #333;
+    color: white;
     margin-bottom: 10px;
 }
 
 #movieInfo p {
-    color: #666;
+    color: white;
     line-height: 1.5;
     margin-bottom: 10px;
 }
 
-#user-review {
+.review {
     width: 95%;
     height: 300px;
-    background-color: #fdfdfd; 
+    background-color: rgb(56, 56, 56); 
     padding: 20px;
 
-    margin-top: 0px;
+    margin-top: 10px;
     border: 1px solid #e0e0e0; /* Light border */
     border-radius: 8px; /* Rounded corners */
     overflow: auto; 
 }
 
-#user-review h1 {
-    color: #333;
+.review h1 {
+    color: white;
     margin-bottom: 10px;
 }
 
-#user-review p {
-    color: #666;
+.review p {
+    color: white;
     line-height: 1.5;
     margin-bottom: 10px;
+}
+.user-review {
+    background-color: black;
+    padding: 10px;
+
+    margin-top: 10px;
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 8px; /* Rounded corners */
 }
 
 
