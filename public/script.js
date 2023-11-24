@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function updateCarouselImages(movieId) {
-        currentMovieId = movieId
+        currentMovieId = movieId;
         await fetch(`${baseURL}/tmdb/movie-images/${movieId}`)
             .then(response => response.json())
             .then(imageUrls => {
@@ -182,12 +182,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const reviewsContainer = document.getElementById('user-review');
         reviewsContainer.innerHTML = '';
+        // reviews.forEach(review => {
+        //     reviewsContainer.innerHTML += `
+        //     <h1>User Reviews</h1>
+        //     <p><strong>User name:</strong> ${review.username}</p>
+        //     <p><strong>Comment:</strong> ${review.comment}</p>
+        // `;
+        // });
         reviews.forEach(review => {
-            reviewsContainer.innerHTML += `
-            <h1>User Reviews</h1>
-            <p><strong>User name:</strong> ${review.username}</p>
-            <p><strong>Comment:</strong> ${review.comment}</p>
-        `;
+            let div = document.createElement('div');
+            div.className = 'user-review';
+            div.innerHTML = `
+                <p><strong>${review.username}</strong>: ${review.comment}</p>
+            `;
+            reviewsContainer.appendChild(div);
         });
     }
 
