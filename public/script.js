@@ -220,3 +220,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('searchButton').addEventListener('click', (e) => {e.preventDefault(); searchMovie()});
 });
+
+//scroll animation for main to index
+document.addEventListener('DOMContentLoaded', (event) => {
+    const startButton = document.getElementById('start-button');
+    const mainPage = document.getElementById('main-page');
+  
+    startButton.addEventListener('click', function() {
+      mainPage.classList.add('scroll-up');
+  
+      setTimeout(function() {''
+      window.location.href = 'index';
+    });
+      }, 1000); // Adjust the timeout to the length of your CSS animation
+    });

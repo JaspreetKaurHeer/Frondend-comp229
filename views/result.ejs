@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<!-- Results Container -->
+<div id="results-container">
+    <% results.forEach(function(movie) { %>
+      <div class="result-item" data-movie-id="<%= movie.id %>">
+        <img src="<%= 'https://image.tmdb.org/t/p/w200' + movie.poster_path %>" alt="<%= movie.title %>">
+        <h2><%= movie.title %></h2>
+        <button class="btn-view-details">View Details</button>
+      </div>
+    <% }); %>
+  </div>
+  
+  <!-- Modal Structure -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <div class="movie-details"></div>
+    </div>
+  </div>
+  </html>
