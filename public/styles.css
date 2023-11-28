@@ -1,13 +1,21 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Noto Serif', serif;
+font-family: 'Titillium Web', sans-serif;
     background: #141414;
+    background-image: url('./img/background1.png');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 20px;
+    background-color: #1c141493;
 }
 
 .logo {
@@ -57,6 +65,7 @@ header {
 }
 
 .sign-up {
+    margin-right: 20px;
     padding: 10px;
     background-color: rgb(84, 84, 113);
     color: white;
@@ -74,13 +83,13 @@ header {
 
 .carousel {
     width: 50%; /* Adjust width */
-    height: 900px; /* Adjust height */
+    height: 1080px; /* Adjust height */
     overflow: hidden;
     position: relative;
 }
 
 .carousel-image {
-    width: 100%;
+  
     height: 100%;
     object-fit: cover;
     position: absolute;
@@ -98,7 +107,7 @@ header {
 
 .comment-section {
     margin-left: 20px;
-    width: 50%; /* Adjust as needed */
+    width: 50%; 
 }
 
 .comment-form textarea {
@@ -112,7 +121,7 @@ header {
 
 #movieInfo {
     width: 95%;
-    height: 300px;
+    height: 400px;
     background-color: rgb(56, 56, 56); 
     padding: 20px;
 
@@ -193,8 +202,8 @@ header {
 #prev { left: 10px; }
 #next { right: 10px; }
 footer {
-    background-color: #f3f3f3;
-    padding: 10px 0;
+    padding: 20px;
+    background-color: #1c141493;
     text-align: center;
 }
 
@@ -205,16 +214,104 @@ footer {
 }
 
 .footer-logo {
-    max-width: 100px; /* Adjust as needed */
+    max-width: 100px; 
 }
 
 .footer-links a, .footer-social-media a {
     margin: 0 10px;
     text-decoration: none;
-    color: #333;
+    color: #fafafa;
 }
 
-.footer-contact p, .footer-copy p {
+.footer-contact {
     margin: 0;
-    color: #333;
+    color: white;
+}
+
+
+/* main */
+#main-page {
+    background-image: url('./img/mainbackground.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+  }
+  #start-button {
+    position: absolute;
+    width: 300px; 
+    height: 100px; 
+    top: 70%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    background: transparent;
+    border: none;
+    color: transparent;
+    font-size: 0px;
+    cursor: pointer;
+  }
+  /* Animation */
+  .scroll-up {
+    animation: scrollUp 1s forwards;
+  }
+  @keyframes scrollUp {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
+
+/* autocomplete */
+/*the container must be positioned relative:*/
+* { box-sizing: border-box; }
+body {
+  font: 16px Arial;
+}
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
 }
