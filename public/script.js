@@ -136,8 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
         await fetch(`${baseURL}/tmdb/search/${keyword}`)
             .then(response => response.json())
             .then(data => {
+                console.log('Fetched data:', data);
                 displayMovieInfo(data.movie);
-                updateCarouselImages(data.id);
+                updateCarouselImages(data.id, data.movie);
                 getMovieReviews(data.id);
             })
             .catch(error => {
@@ -152,27 +153,46 @@ document.addEventListener('DOMContentLoaded', () => {
             <h1>${movie.title || 'Title Not Available'}</h1>
             <p><strong>Release Date:</strong> ${movie.release_date || 'Not Available'}</p>
             <p><strong>Overview:</strong> ${movie.overview || 'No overview available'}</p>
-            <!-- More movie details here -->
-        `;
+
+        `
+        ;
     }
 
-    async function updateCarouselImages(movieId) {
+    async function updateCarouselImages(movieId, movie) {
+        
         currentMovieId = movieId;
-        await fetch(`${baseURL}/tmdb/movie-images/${movieId}`)
-            .then(response => response.json())
-            .then(imageUrls => {
-                const carouselImages = document.querySelectorAll('.carousel-image');
-                
-                imageUrls.forEach((url, index) => {
-                    if (carouselImages[index]) {
-                        carouselImages[index].src = url;
-                        carouselImages[index].classList.remove('active');
-                        if (index === 0) carouselImages[index].classList.add('active');
-                    }
-                });
-            })
-            .catch(error => console.error('Error:', error));
+        currentMovie = movie;
+    
+        const carouselImages = document.querySelectorAll('.carousel-image');
+
+        if (movie && movie.poster_path) {
+            const posterImageUrl = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
+            carouselImages[0].src = posterImageUrl;
+            carouselImages[0].classList.add('active');
+        } 
+    
+        try {
+            const response = await fetch(`${baseURL}/tmdb/movie-images/${movieId}`);
+            const imageUrls = await response.json();
+            imageUrls.forEach((url, index) => {
+                adjustedIndex = index+1
+                if (carouselImages[adjustedIndex]) {
+                    carouselImages[adjustedIndex].src = url;
+                    carouselImages[adjustedIndex].classList.remove('active');
+                }
+
+               if (adjustedIndex !== 0) {
+                    carouselImages[adjustedIndex].style.width = '100%';
+                }
+            
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
+    
+    
+    
 
     async function getMovieReviews(movieId) {
         await fetch(`${baseURL}/reviews/movie/${movieId}`)
@@ -232,5 +252,107 @@ document.addEventListener('DOMContentLoaded', (event) => {
       setTimeout(function() {''
       window.location.href = 'index';
     });
-      }, 1000); // Adjust the timeout to the length of your CSS animation
+      }, 1000); // Adjust the timeout to the length 
     });
+
+
+    function autocomplete(inp) {
+        var currentFocus;
+    
+        inp.addEventListener("input", function(e) {
+            var a, b, val = this.value;
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+    
+            // Fetch the API key from back-end
+            fetch('http://localhost:5050/api/getApiKey')
+                .then(response => response.json())
+                .then(data => {
+                    const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(val)}&include_adult=false&language=en-US&page=1`;
+    
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            accept: 'application/json',
+                            Authorization: `${data.apiKey}` 
+                        }
+                    };
+    
+                    fetch(url, options)
+                        .then(res => res.json())
+                        .then(json => {
+                            if (json.results && Array.isArray(json.results)) {
+                            const movies = json.results.slice(0, 5);
+                            a = document.createElement("DIV");
+                            a.setAttribute("id", this.id + "autocomplete-list");
+                            a.setAttribute("class", "autocomplete-items");
+                            this.parentNode.appendChild(a);
+    
+                            movies.forEach(movie => {
+                                b = document.createElement("DIV");
+                                b.innerHTML = `<strong>${movie.title.substr(0, val.length)}</strong>`;
+                                b.innerHTML += movie.title.substr(val.length);
+                                b.innerHTML += `<input type='hidden' value='${movie.title}'>`;
+                                b.addEventListener("click", function(e) {
+                                    inp.value = this.getElementsByTagName("input")[0].value;
+                                    closeAllLists();
+                                });
+                                a.appendChild(b);
+                            });}
+                            else {
+                                console.log('No results found or incorrect data format');
+                            }
+                        })
+                        .catch(err => console.error('error:' + err));
+                });
+        });
+    
+        /* Keyboard function */
+        inp.addEventListener("keydown", function(e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                currentFocus++;
+                addActive(x);
+            } else if (e.keyCode == 38) {
+                currentFocus--;
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+    
+        function addActive(x) {
+            if (!x) return false;
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+    
+        function removeActive(x) {
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+    
+        function closeAllLists(elmnt) {
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+    
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+    
+    autocomplete(document.getElementById("searchKeyword"));
+    
