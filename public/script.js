@@ -355,4 +355,45 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
     
     autocomplete(document.getElementById("searchKeyword"));
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+    // Register Form Submission
+document.querySelector('#register-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = this.querySelector('input[name="username"]').value;
+    const password = this.querySelector('input[name="password"]').value;
+    const email = this.querySelector('input[name="email"]').value;
+  
+    fetch(`${baseURL}/register`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password, email})
+    })
+    .then(response => response.json())
+    .then(data => console.log(data));
+  });
+  
+  // Login Form Submission
+  document.querySelector('#login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = this.querySelector('input[name="username"]').value;
+    const password = this.querySelector('input[name="password"]').value;
+  
+    fetch(`${baseURL}/login`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password})
+    })
+    .then(response => response.json())
+    .then(data => console.log(data));
+  });
+  
+  // Logout
+  document.querySelector('#logout-button').addEventListener('click', function() {
+    fetch(`${baseURL}/logout`, {method: 'POST'})
+    .then(response => response.json())
+    .then(data => console.log(data));
+  });
+  
     
