@@ -39,6 +39,11 @@ app.post('/login', (req, res) => {
     // Handle login logic here
     // On successful login, redirect to a specific page
 });
+app.post('/logout', (req, res) => {
+    // Logic to clear the user's session or authentication details
+    res.json({ message: 'Logged out successfully' });
+});
+
 
 // Start the server
 app.listen(port, () => {
