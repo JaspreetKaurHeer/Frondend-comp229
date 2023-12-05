@@ -394,6 +394,6 @@ document.querySelector('#register-form').addEventListener('submit', function(eve
     fetch(`${baseURL}/logout`, {method: 'POST'})
     .then(response => response.json())
     .then(data => console.log(data));
-  });
-  
+  });  
+
     
