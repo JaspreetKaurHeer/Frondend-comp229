@@ -11,35 +11,36 @@ app.use(express.urlencoded({ extended: true })); // For parsing application/x-ww
 app.get('/', (req, res) => {
     res.render('main');
 });
+
 app.get('/index', (req, res) => {
     res.render('index');
 });
-app.get('/register',(req, res) => {
+
+app.get('/register', (req, res) => {
     res.render('register');
 });
-app.get('/login',(req, res) => {
+
+app.get('/login', (req, res) => {
     res.render('login');
 });
+
 app.get('/logout', (req, res) => {
-    // Logic to destroy session or clear authentication
-    res.redirect('/index'); // Redirect to the index page after logout
+    // Add your logic here to clear the user's session or authentication details
+    res.redirect('/login'); // Redirect to the login page after logout
 });
 
-app.get('/logout',(req, res) => {
-    res.render('logout'); // This line is trying to render a view named 'logout'
-});
-
-// POST Routes
+// POST Routes for handling form submissions
 app.post('/register', (req, res) => {
-    // Handle registration logic
+    // Handle registration logic here
     // Redirect after successful registration
 });
 
 app.post('/login', (req, res) => {
-    // Handle login logic
-    // On successful login, redirect to home or another page
+    // Handle login logic here
+    // On successful login, redirect to a specific page
 });
 
+// Start the server
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
