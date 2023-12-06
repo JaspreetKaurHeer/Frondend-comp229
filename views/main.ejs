@@ -18,13 +18,12 @@
       
         if (!startButton) return;
         startButton.addEventListener('click', function() {
-          mainPage.classList.add('scroll-up');
-      
-          setTimeout(function() {''
-          window.location.href = 'index';
-        });
+            mainPage.classList.add('scroll-up');
+        
+            setTimeout(function() {''
+            window.location.href = '/login';
+          });
           }, 1000); // Adjust the timeout to the length 
-        });
 
         document.getElementById('searchButton').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/index"});
         document.getElementById('login-button').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/login"});
@@ -33,6 +32,18 @@
             localStorage.removeItem("username");
             localStorage.removeItem("token");
             window.location.href = "/";});
+
+
+          const username = localStorage.getItem("username");
+          if (username) {
+              document.getElementById('login-button').style.visibility = "hidden"; 
+              document.getElementById('register-button').style.visibility = "hidden"; 
+              document.getElementById('username').textContent = username;
+          }
+          else {
+              document.getElementById('logout-button').style.visibility = "hidden"; 
+          }
+        }); 
     </script>
 </body>
 </html>
