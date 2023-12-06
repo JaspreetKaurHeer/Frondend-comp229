@@ -264,6 +264,16 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem("token");
         window.location.href = "/";
         alert("Logout Success!");});
+
+    const username = localStorage.getItem("username");
+    if (username) {
+        document.getElementById('login-button').style.visibility = "hidden"; 
+        document.getElementById('register-button').style.visibility = "hidden"; 
+        document.getElementById('username').textContent = username;
+    }
+    else {
+        document.getElementById('logout-button').style.visibility = "hidden"; 
+    }
 });
 
     function autocomplete(inp) {
