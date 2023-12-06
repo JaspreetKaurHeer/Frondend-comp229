@@ -119,14 +119,14 @@
     <a href="/" class="back-button">&#x2190; Back</a>
     <div class="container">
       <h1>Login</h1>
-      <form id="login-form" action="/login" method="post">
+      <form id="login-form">
         <div>
-          <label>Username:</label>
-          <input type="text" name="username"/>
+          <label>Email:</label>
+          <input id="email" type="text" name="email"/>
         </div>
         <div>
           <label>Password:</label>
-          <input type="password" name="password"/>
+          <input id="password" type="password" name="password"/>
         </div>
         <div>
           <input type="submit" value="Log In"/>
@@ -134,5 +134,34 @@
       </form>
     </div>
   </div>
+  <script>
+    // Login Form Submission
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const baseURL = 'http://localhost:5050';
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        fetch(`${baseURL}/user/login`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              "password":password,
+              "email":email
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if(data.token){
+            localStorage.setItem("username", data.user.name);
+            localStorage.setItem("token", data.token);
+            window.location.href = "/index";
+          }})
+        .catch(error => {
+              console.error('Error:', error);
+              alert(error.message);
+          });
+        });
+  </script>
 </body>
 </html>

@@ -37,14 +37,26 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         const comment = this.querySelector('textarea').value;
         this.querySelector('textarea').value = '';
+        const username = localStorage.getItem("username");
+
+        if (!username) {
+            alert('Please login!');
+            return;
+        }
 
         if (!comment) {
             return;
         }
 
+        if (!currentMovieId) {
+            alert('Please search a movie!');
+            return;
+        }
+
         let commentBody = {
             "movieid": currentMovieId,
-            "comment": comment
+            "comment": comment,
+            "username": username
         };
 
         fetch(`${baseURL}/reviews/`, 
@@ -52,7 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "POST",
                 mode: "cors",
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 body: JSON.stringify(commentBody)
             })
@@ -68,6 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('update-comment').addEventListener('click', (e) => {
+        const username = localStorage.getItem("username");
+        if (!username) {
+            alert('Please login!');
+            return;
+        }
         if (!currentReviewId) {
             alert('Please select a review to update!');
             return;
@@ -85,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "PATCH",
                 mode: "cors",
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 body: JSON.stringify(commentBody)
             })
@@ -101,6 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('delete-comment').addEventListener('click', (e) => {
+        const username = localStorage.getItem("username");
+        if (!username) {
+            alert('Please login!');
+            return;
+        }
         if (!currentReviewId) {
             alert('Please select a review to delete!');
             return;
@@ -111,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "DELETE",
                 mode: "cors",
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 body: JSON.stringify({})
             })
@@ -159,9 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function updateCarouselImages(movieId, movie) {
-        
         currentMovieId = movieId;
-        currentMovie = movie;
     
         const carouselImages = document.querySelectorAll('.carousel-image');
 
@@ -175,16 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${baseURL}/tmdb/movie-images/${movieId}`);
             const imageUrls = await response.json();
             imageUrls.forEach((url, index) => {
-                adjustedIndex = index+1
-                if (carouselImages[adjustedIndex]) {
-                    carouselImages[adjustedIndex].src = url;
-                    carouselImages[adjustedIndex].classList.remove('active');
+                if (carouselImages[index+1]) {
+                    carouselImages[index+1].src = url;
+                    carouselImages[index+1].classList.remove('active');
+                    carouselImages[index+1].style.width = '100%';
                 }
-
-               if (adjustedIndex !== 0) {
-                    carouselImages[adjustedIndex].style.width = '100%';
-                }
-            
             });
         } catch (error) {
             console.error('Error:', error);
@@ -239,22 +257,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById('searchButton').addEventListener('click', (e) => {e.preventDefault(); searchMovie()});
+    document.getElementById('login-button').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/login"});
+    document.getElementById('register-button').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/register"});
+    document.getElementById('logout-button').addEventListener('click', (e) => {
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
+        window.location.href = "/";
+        alert("Logout Success!");});
 });
-
-//scroll animation for main to index
-document.addEventListener('DOMContentLoaded', (event) => {
-    const startButton = document.getElementById('start-button');
-    const mainPage = document.getElementById('main-page');
-  
-    startButton.addEventListener('click', function() {
-      mainPage.classList.add('scroll-up');
-  
-      setTimeout(function() {''
-      window.location.href = 'index';
-    });
-      }, 1000); // Adjust the timeout to the length 
-    });
-
 
     function autocomplete(inp) {
         var currentFocus;
@@ -357,43 +367,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
     autocomplete(document.getElementById("searchKeyword"));
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-    // Register Form Submission
-document.querySelector('#register-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const username = this.querySelector('input[name="username"]').value;
-    const password = this.querySelector('input[name="password"]').value;
-    const email = this.querySelector('input[name="email"]').value;
-  
-    fetch(`${baseURL}/register`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({username, password, email})
-    })
-    .then(response => response.json())
-    .then(data => console.log(data));
-  });
-  
-  // Login Form Submission
-  document.querySelector('#login-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const username = this.querySelector('input[name="username"]').value;
-    const password = this.querySelector('input[name="password"]').value;
-  
-    fetch(`${baseURL}/login`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({username, password})
-    })
-    .then(response => response.json())
-    .then(data => console.log(data));
-  });
-  
-  // Logout
-  document.querySelector('#logout-button').addEventListener('click', function() {
-    fetch(`${baseURL}/logout`, {method: 'POST'})
-    .then(response => response.json())
-    .then(data => console.log(data));
-  });  
 
     
