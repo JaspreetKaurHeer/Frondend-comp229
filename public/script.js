@@ -161,8 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
         await fetch(`${baseURL}/tmdb/search/${keyword}`)
             .then(response => response.json())
             .then(data => {
+                console.log('Fetched data:', data);
                 displayMovieInfo(data.movie);
-                updateCarouselImages(data.id);
+                updateCarouselImages(data.id, data.movie);
                 getMovieReviews(data.id);
             })
             .catch(error => {
@@ -177,8 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <h1>${movie.title || 'Title Not Available'}</h1>
             <p><strong>Release Date:</strong> ${movie.release_date || 'Not Available'}</p>
             <p><strong>Overview:</strong> ${movie.overview || 'No overview available'}</p>
-            <!-- More movie details here -->
-        `;
+
+        `
+        ;
     }
 
     async function updateCarouselImages(movieId, movie) {
@@ -263,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = "/";
         alert("Logout Success!");});
 });
-
 
     function autocomplete(inp) {
         var currentFocus;
@@ -364,7 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     autocomplete(document.getElementById("searchKeyword"));
-
 
 
 
