@@ -37,14 +37,26 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         const comment = this.querySelector('textarea').value;
         this.querySelector('textarea').value = '';
+        const username = localStorage.getItem("username");
+
+        if (!username) {
+            alert('Please login!');
+            return;
+        }
 
         if (!comment) {
             return;
         }
 
+        if (!currentMovieId) {
+            alert('Please search a movie!');
+            return;
+        }
+
         let commentBody = {
             "movieid": currentMovieId,
-            "comment": comment
+            "comment": comment,
+            "username": username
         };
 
         fetch(`${baseURL}/reviews/`, 
@@ -52,7 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "POST",
                 mode: "cors",
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 body: JSON.stringify(commentBody)
             })
@@ -68,6 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('update-comment').addEventListener('click', (e) => {
+        const username = localStorage.getItem("username");
+        if (!username) {
+            alert('Please login!');
+            return;
+        }
         if (!currentReviewId) {
             alert('Please select a review to update!');
             return;
@@ -85,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "PATCH",
                 mode: "cors",
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 body: JSON.stringify(commentBody)
             })
@@ -101,6 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('delete-comment').addEventListener('click', (e) => {
+        const username = localStorage.getItem("username");
+        if (!username) {
+            alert('Please login!');
+            return;
+        }
         if (!currentReviewId) {
             alert('Please select a review to delete!');
             return;
@@ -111,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "DELETE",
                 mode: "cors",
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 body: JSON.stringify({})
             })
@@ -156,23 +181,34 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    async function updateCarouselImages(movieId) {
+    async function updateCarouselImages(movieId, movie) {
         currentMovieId = movieId;
-        await fetch(`${baseURL}/tmdb/movie-images/${movieId}`)
-            .then(response => response.json())
-            .then(imageUrls => {
-                const carouselImages = document.querySelectorAll('.carousel-image');
-                
-                imageUrls.forEach((url, index) => {
-                    if (carouselImages[index]) {
-                        carouselImages[index].src = url;
-                        carouselImages[index].classList.remove('active');
-                        if (index === 0) carouselImages[index].classList.add('active');
-                    }
-                });
-            })
-            .catch(error => console.error('Error:', error));
+    
+        const carouselImages = document.querySelectorAll('.carousel-image');
+
+        if (movie && movie.poster_path) {
+            const posterImageUrl = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
+            carouselImages[0].src = posterImageUrl;
+            carouselImages[0].classList.add('active');
+        } 
+    
+        try {
+            const response = await fetch(`${baseURL}/tmdb/movie-images/${movieId}`);
+            const imageUrls = await response.json();
+            imageUrls.forEach((url, index) => {
+                if (carouselImages[index+1]) {
+                    carouselImages[index+1].src = url;
+                    carouselImages[index+1].classList.remove('active');
+                    carouselImages[index+1].style.width = '100%';
+                }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
+    
+    
+    
 
     async function getMovieReviews(movieId) {
         await fetch(`${baseURL}/reviews/movie/${movieId}`)
@@ -219,18 +255,117 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById('searchButton').addEventListener('click', (e) => {e.preventDefault(); searchMovie()});
+    document.getElementById('login-button').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/login"});
+    document.getElementById('register-button').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/register"});
+    document.getElementById('logout-button').addEventListener('click', (e) => {
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
+        window.location.href = "/";
+        alert("Logout Success!");});
 });
 
-//scroll animation for main to index
-document.addEventListener('DOMContentLoaded', (event) => {
-    const startButton = document.getElementById('start-button');
-    const mainPage = document.getElementById('main-page');
-  
-    startButton.addEventListener('click', function() {
-      mainPage.classList.add('scroll-up');
-  
-      setTimeout(function() {''
-      window.location.href = 'index';
-    });
-      }, 1000); // Adjust the timeout to the length of your CSS animation
-    });
+
+    function autocomplete(inp) {
+        var currentFocus;
+    
+        inp.addEventListener("input", function(e) {
+            var a, b, val = this.value;
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+    
+            // Fetch the API key from back-end
+            fetch('http://localhost:5050/api/getApiKey')
+                .then(response => response.json())
+                .then(data => {
+                    const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(val)}&include_adult=false&language=en-US&page=1`;
+    
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            accept: 'application/json',
+                            Authorization: `${data.apiKey}` 
+                        }
+                    };
+    
+                    fetch(url, options)
+                        .then(res => res.json())
+                        .then(json => {
+                            if (json.results && Array.isArray(json.results)) {
+                            const movies = json.results.slice(0, 5);
+                            a = document.createElement("DIV");
+                            a.setAttribute("id", this.id + "autocomplete-list");
+                            a.setAttribute("class", "autocomplete-items");
+                            this.parentNode.appendChild(a);
+    
+                            movies.forEach(movie => {
+                                b = document.createElement("DIV");
+                                b.innerHTML = `<strong>${movie.title.substr(0, val.length)}</strong>`;
+                                b.innerHTML += movie.title.substr(val.length);
+                                b.innerHTML += `<input type='hidden' value='${movie.title}'>`;
+                                b.addEventListener("click", function(e) {
+                                    inp.value = this.getElementsByTagName("input")[0].value;
+                                    closeAllLists();
+                                });
+                                a.appendChild(b);
+                            });}
+                            else {
+                                console.log('No results found or incorrect data format');
+                            }
+                        })
+                        .catch(err => console.error('error:' + err));
+                });
+        });
+    
+        /* Keyboard function */
+        inp.addEventListener("keydown", function(e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                currentFocus++;
+                addActive(x);
+            } else if (e.keyCode == 38) {
+                currentFocus--;
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+    
+        function addActive(x) {
+            if (!x) return false;
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+    
+        function removeActive(x) {
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+    
+        function closeAllLists(elmnt) {
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+    
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+    
+    autocomplete(document.getElementById("searchKeyword"));
+
+
+
+
+    

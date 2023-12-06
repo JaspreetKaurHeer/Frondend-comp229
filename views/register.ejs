@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      font-family: 'Roboto', sans-serif;
+      height: 100%;
+      margin: 0;
+    }
+
+    .bg-image {
+      background-image: url('/img/1.png');
+      height: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      filter: blur(8px);
+      -webkit-filter: blur(8px);
+      position: fixed;
+      width: 100%;
+      left: 0;
+      top: 0;
+      z-index: -1;
+    }
+
+    .content-container {
+      background-color: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      z-index: 1;
+    }
+
+    form div {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type='text'], input[type='password'], input[type='email'], input[type='submit'] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    input[type='submit'] {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    input[type='submit']:hover {
+      background-color: #0056b3;
+    }
+
+    .back-button {
+      display: block;
+      margin: 20px auto;
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .back-button:hover {
+      color: #0056b3;
+    }
+
+    @media screen and (max-width: 600px) {
+      .content-container {
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-image"></div>
+
+  <div class="content-container">
+    <a href="/" class="back-button">&#x2190; Back</a>
+    <div class="container">
+      <h1>Register</h1>
+ <form id="register-form">
+        <div>
+          <label>Username:</label>
+          <input id="username" type="text" name="Username" required/>
+        </div>
+        <div>
+          <label>Email:</label>
+          <input id="email" type="email" name="email" required/>
+        </div>
+        <div>
+          <label>Password:</label>
+          <input id="password" type="password" name="password" required/>
+        </div>
+        <div>
+          <input type="submit" value="Register"/>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Register Form Submission
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const baseURL = 'http://localhost:5050';
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const email = document.getElementById('email').value;
+
+        console.log("register");
+        
+        fetch(`${baseURL}/user/register`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+            "name":username, 
+            "password":password,
+            "email":email
+        })})
+        .then(response => response.json())
+        .then(data => {
+          if(data.token){
+            localStorage.setItem("username", data.user.name);
+            localStorage.setItem("token", data.token);
+            window.location.href = "/index";
+          }});
+        })
+        .catch(error => {
+              console.error('Error:', error);
+              alert(error.message);
+        });
+  </script>
+</body>
+</html>
