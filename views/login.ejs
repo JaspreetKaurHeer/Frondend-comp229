@@ -150,7 +150,12 @@
               "email":email
             })
         })
-        .then(response => response.json())
+        .then(response => {
+          if (response.status !== 200) {
+            throw new Error(response.statusText);
+          }
+          return response.json();
+        })
         .then(data => {
           if(data.token){
             localStorage.setItem("username", data.user.name);
@@ -159,7 +164,7 @@
           }})
         .catch(error => {
               console.error('Error:', error);
-              alert(error.message);
+              alert("Login failed!");
           });
         });
   </script>

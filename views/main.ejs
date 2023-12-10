@@ -25,25 +25,24 @@
           });
           }, 1000); // Adjust the timeout to the length 
 
-        document.getElementById('searchButton').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/index"});
+        const username = localStorage.getItem("username");
+        if (username) {
+            document.getElementById('login-button').style.visibility = "hidden"; 
+            document.getElementById('register-button').style.visibility = "hidden"; 
+            document.getElementById('username').textContent = "Welcome! " + username;
+        }
+        else {
+            document.getElementById('logout-button').style.visibility = "hidden"; 
+        }
+
+        document.getElementById('searchButton').addEventListener('click', (e) => {e.preventDefault(); if (username) window.location.href = "/index"; else alert("Please login!");});
         document.getElementById('login-button').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/login"});
         document.getElementById('register-button').addEventListener('click', (e) => {e.preventDefault(); window.location.href = "/register"});
         document.getElementById('logout-button').addEventListener('click', (e) => {
             localStorage.removeItem("username");
             localStorage.removeItem("token");
             window.location.href = "/";});
-
-
-          const username = localStorage.getItem("username");
-          if (username) {
-              document.getElementById('login-button').style.visibility = "hidden"; 
-              document.getElementById('register-button').style.visibility = "hidden"; 
-              document.getElementById('username').textContent = username;
-          }
-          else {
-              document.getElementById('logout-button').style.visibility = "hidden"; 
-          }
-        }); 
+      }); 
     </script>
 </body>
 </html>
