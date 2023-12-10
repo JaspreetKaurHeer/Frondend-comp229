@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (username) {
         document.getElementById('login-button').style.visibility = "hidden"; 
         document.getElementById('register-button').style.visibility = "hidden"; 
-        document.getElementById('username').textContent = username;
+        document.getElementById('username').textContent = "Welcome! " + username;
     }
     else {
         document.getElementById('logout-button').style.visibility = "hidden"; 
