@@ -29,7 +29,7 @@ header {
     align-items: center;
     padding: 20px;
     background-color: #1c141493;
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 .logo {
@@ -316,6 +316,7 @@ footer {
     z-index: 20;
     top: 100%;
     left: 0;
+    color: black;
     right: 0;
   }
   
@@ -332,7 +333,7 @@ footer {
   
   .autocomplete-active {
     background-color: DodgerBlue !important; 
-    color: #ffffff; 
+    color: #111010; 
   }
 
   #login-button, #register-button, #logout-button {
