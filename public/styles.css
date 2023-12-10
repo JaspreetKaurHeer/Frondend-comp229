@@ -19,6 +19,7 @@ font-family: 'Titillium Web', sans-serif;
 }
 
 
+
 .main-container {
     flex: 1; 
 }
@@ -42,8 +43,8 @@ header {
     position: relative;
     align-items: center;
     margin-top: 0px;
-    border: 1px solid #e0e0e0; /* Light border */
-    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #e0e0e0; 
+    border-radius: 8px; 
     transition: border 0.3s ease;
 }
 
@@ -60,7 +61,7 @@ header {
 
 #search-box:hover,
 #search-box:focus {
-    border: 2px solid blue;
+
     transition: border 0.3s ease;
 }
 
@@ -124,10 +125,36 @@ header {
 }
 
 .comment-form textarea {
-    width: 100%;
+    width: 95%;
     height: 100px;
     margin-top: 10px;
     margin-bottom: 10px;
+    background-color: #f8f8f8; 
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    padding: 10px;
+    font-size: 16px; 
+    color: #333; 
+    border-radius: 4px; 
+    resize: vertical;
+
+}
+
+.comment-form textarea:focus {
+    border-color: #1f88f8; 
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); 
+    outline: none; 
+}
+
+.comment-form button {
+    background-color: rgb(156, 84, 224); 
+    color: white; 
+    padding: 10px 20px; 
+    margin: 8px 0; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-size: 16px; 
 }
 
 /* movie information and font style setting*/
@@ -139,8 +166,8 @@ header {
     padding: 20px;
 
     margin-top: 10px;
-    border: 1px solid #e0e0e0; /* Light border */
-    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #e0e0e0; 
+    border-radius: 8px; 
     overflow: auto; 
 }
 
@@ -191,15 +218,6 @@ header {
 }
 
 
-.comment-form button, #update-comment, #delete-comment {
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: rgb(143, 82, 35);
-    color: white;
-    border: none;
-    cursor: pointer;
-}
 
 #prev, #next {
     position: absolute;
@@ -315,3 +333,13 @@ footer {
     background-color: DodgerBlue !important; 
     color: #ffffff; 
   }
+
+  #login-button, #register-button, #logout-button {
+    background: none;
+    color: white;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+}
