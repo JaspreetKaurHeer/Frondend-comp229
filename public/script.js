@@ -287,7 +287,11 @@ document.addEventListener('DOMContentLoaded', () => {
             currentFocus = -1;
     
             // Fetch the API key from back-end
-            fetch('http://localhost:5050/api/getApiKey')
+
+            //const baseURL = 'http://localhost:5050';
+            const baseURL = 'https://moviesite-hx14.onrender.com';
+
+            fetch(`${baseURL}/api/getApiKey`)
                 .then(response => response.json())
                 .then(data => {
                     const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(val)}&include_adult=false&language=en-US&page=1`;
